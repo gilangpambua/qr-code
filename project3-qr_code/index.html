@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR-Code Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="QR">
+        <h1>Enter URL</h1>
+        <input id="url" type="text">
+        <button onclick="generateQR()">Generate QR Code</button><br />
+        <div id="qrcode-container"></div>
+        <a id="download-link" download="qrcode.png"><button id="download-button" style="display: none;">Download QR
+                Code</button></a>
+    </div>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script>
+        function generateQR() {
+            var url = document.getElementById("url").value;
+            var qrcodeContainer = document.getElementById("qrcode-container");
+
+            qrcodeContainer.innerHTML = "";
+
+            if (url.trim() !== "") {
+                var qrcode = new QRCode(qrcodeContainer, {
+                    text: url,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#000000",
+                    colorLight: "transparent",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                qrcodeContainer.style.display = "inline-block";
+
+                document.getElementById("download-button").style.display = "block";
+
+                var downloadLink = document.getElementById("download-link");
+                var canvas = qrcodeContainer.getElementsByTagName("canvas")[0];
+                downloadLink.href = canvas.toDataURL("image/png").replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+            } else {
+                alert("Please enter a URL first.");
+            }
+        }
+    </script>
+</body>
+
+</html>
